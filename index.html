@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Обжиг — керамическая студия</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#efeae2;--ink:#1f1a17;--mute:#7a6f66;--clay:#c4694a;--line:rgba(31,26,23,.16)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{font-family:Manrope,sans-serif;color:var(--ink);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+a{color:inherit;text-decoration:none}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.fallback{position:fixed;z-index:0;right:8vw;top:18vh;width:40vw;height:40vw;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d3bf,#c4694a 70%);filter:blur(2px);display:none}
+.nowebgl .fallback{display:block}
+main,header,footer{position:relative;z-index:1}
+.serif{font-family:Fraunces,serif;font-weight:300;letter-spacing:-.035em}
+.cap{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--mute)}
+nav{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:26px 4vw;mix-blend-mode:multiply}
+nav .logo{font-family:Fraunces,serif;font-size:26px;letter-spacing:-.03em}
+nav ul{display:flex;gap:34px;list-style:none;font-size:14px}
+nav ul a{position:relative}
+nav ul a::after{content:"";position:absolute;left:0;bottom:-3px;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.7,0,.2,1)}
+nav ul a:hover::after{transform:scaleX(1);transform-origin:left}
+.hero{min-height:100svh;padding:0 4vw;display:grid;grid-template-rows:1fr auto;align-content:end}
+.hero h1{font-size:clamp(3.2rem,11.5vw,12rem);line-height:.9;padding-top:22vh}
+.hero h1 em{font-style:italic;color:var(--clay)}
+.line{display:block;overflow:hidden;padding-bottom:.08em}
+.line>span{display:block;will-change:transform}
+.hero-foot{display:flex;justify-content:space-between;align-items:flex-end;padding:5vh 0 4vh;gap:30px}
+.hero-foot p{max-width:340px;font-size:15px;line-height:1.55;color:var(--mute)}
+.scroll{display:flex;align-items:center;gap:12px}
+.scroll i{display:block;width:1px;height:46px;background:var(--ink);transform-origin:top;animation:drip 2.2s cubic-bezier(.7,0,.2,1) infinite}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding:22px 0;background:rgba(239,234,226,.7);backdrop-filter:blur(6px)}
+.marquee .track{display:flex;width:max-content;font-size:clamp(2rem,4.4vw,4.4rem);white-space:nowrap}
+.marquee .track span{padding-right:3vw}
+.marquee .track b{font-weight:300;color:var(--clay);padding-right:3vw}
+.manifest{padding:26vh 4vw 20vh}
+.manifest p{font-size:clamp(1.8rem,4.2vw,4.2rem);line-height:1.12;max-width:62%}
+.manifest .w{opacity:.14}
+.manifest .cap{margin-bottom:34px}
+.list{padding:10vh 4vw 14vh}
+.list .head{display:flex;justify-content:space-between;margin-bottom:5vh}
+.row{display:grid;grid-template-columns:70px 1fr auto;align-items:baseline;padding:30px 0;border-top:1px solid var(--line);position:relative;overflow:hidden;cursor:pointer}
+.row:last-child{border-bottom:1px solid var(--line)}
+.row::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateY(101%);transition:transform .6s cubic-bezier(.7,0,.2,1);z-index:-1}
+.row h3{font-size:clamp(2rem,4.6vw,4.6rem);transition:transform .6s cubic-bezier(.7,0,.2,1),color .4s}
+.row .cap,.row .price{transition:color .4s}
+.row .price{font-family:Fraunces,serif;font-size:22px}
+.row:hover::before{transform:none}
+.row:hover{color:#efeae2}
+.row:hover h3{transform:translateX(24px)}
+.row:hover .cap{color:#bdb2a6}
+.process{height:340vh;position:relative}
+.pin{position:sticky;top:0;height:100svh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 4vw}
+.pin .num{font-size:clamp(8rem,24vw,24rem);line-height:.8;position:absolute;left:3vw;bottom:4vh;color:rgba(31,26,23,.07)}
+.steps{grid-column:2;position:relative;height:300px}
+.step{position:absolute;inset:0;opacity:0}
+.step h3{font-size:clamp(2.4rem,4.6vw,4.6rem);margin:14px 0 20px}
+.step p{max-width:420px;line-height:1.6;color:var(--mute)}
+.bar{position:absolute;left:4vw;right:4vw;bottom:5vh;height:1px;background:var(--line)}
+.bar i{display:block;height:100%;background:var(--ink);transform:scaleX(0);transform-origin:left}
+.cta{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 4vw}
+.cta h2{font-size:clamp(3rem,10vw,10.5rem);line-height:.92}
+.cta h2 em{color:var(--clay)}
+.btn{margin-top:6vh;display:inline-flex;align-items:center;justify-content:center;width:170px;height:170px;border-radius:50%;background:var(--ink);color:#efeae2;font-size:14px;font-weight:500;will-change:transform}
+.btn span{display:block;pointer-events:none}
+footer{display:flex;justify-content:space-between;padding:30px 4vw;border-top:1px solid var(--line);font-size:13px;color:var(--mute);background:var(--bg)}
+.cur{position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;background:var(--clay);z-index:9;pointer-events:none;mix-blend-mode:multiply;display:none}
+@media(pointer:fine){.cur{display:block}}
+@media(max-width:800px){
+  nav ul{display:none}
+  .manifest p{max-width:100%}
+  .pin{grid-template-columns:1fr;align-items:end;padding-bottom:16vh}
+  .steps{grid-column:1}
+  .row{grid-template-columns:40px 1fr}
+  .row .price{display:none}
+  .hero-foot{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas><div class="fallback"></div><div class="cur"></div>
+
+<nav>
+  <a class="logo" href="#">Обжиг<sup style="font-size:11px">®</sup></a>
+  <ul><li><a href="#col">Коллекции</a></li><li><a href="#proc">Процесс</a></li><li><a href="#cta">Мастер-классы</a></li></ul>
+  <span class="cap" style="color:var(--ink)">Казань, с 2016</span>
+</nav>
+
+<header class="hero">
+  <h1 class="serif">
+    <span class="line"><span>Форма, которую</span></span>
+    <span class="line"><span><em>помнят</em> руки</span></span>
+  </h1>
+  <div class="hero-foot">
+    <p class="fade">Посуда и объекты из каменной массы. Делаем на круге, обжигаем при 1260 °C, глазуруем вручную. Тираж не больше 40 штук.</p>
+    <div class="scroll cap fade"><i></i>Листайте</div>
+  </div>
+</header>
+
+<main>
+  <div class="marquee"><div class="track serif" id="trk">
+    <span>Каменная масса</span><b>✺</b><span>Обжиг 1260 °C</span><b>✺</b><span>Ручная глазурь</span><b>✺</b><span>Тираж до 40</span><b>✺</b>
+    <span>Каменная масса</span><b>✺</b><span>Обжиг 1260 °C</span><b>✺</b><span>Ручная глазурь</span><b>✺</b><span>Тираж до 40</span><b>✺</b>
+  </div></div>
+
+  <section class="manifest">
+    <div class="cap">Манифест</div>
+    <p class="serif" id="mf">Мы не гонимся за идеальной поверхностью. Лёгкая асимметрия, след пальца в глазури и тяжесть в ладони делают чашку вещью, а не предметом из каталога.</p>
+  </section>
+
+  <section class="list" id="col">
+    <div class="head"><span class="cap">Коллекции 2026</span><span class="cap">04 серии</span></div>
+    <div class="row"><span class="cap">01</span><h3 class="serif">Пепел</h3><span class="price">от 2 400 ₽</span></div>
+    <div class="row"><span class="cap">02</span><h3 class="serif">Глина &amp; соль</h3><span class="price">от 3 100 ₽</span></div>
+    <div class="row"><span class="cap">03</span><h3 class="serif">Тёплый камень</h3><span class="price">от 4 800 ₽</span></div>
+    <div class="row"><span class="cap">04</span><h3 class="serif">Ночной обжиг</h3><span class="price">от 6 500 ₽</span></div>
+  </section>
+
+  <section class="process" id="proc">
+    <div class="pin">
+      <div class="num serif" id="num">01</div>
+      <div class="steps">
+        <div class="step"><span class="cap">Шаг 01 · 3 дня</span><h3 class="serif">Центровка</h3><p>Масса вымешивается вручную и отдыхает. Центруем на круге, пока форма не перестанет сопротивляться.</p></div>
+        <div class="step"><span class="cap">Шаг 02 · 9 часов</span><h3 class="serif">Огонь</h3><p>Два обжига: утильный при 980 °C и глазурный при 1260 °C. Печь охлаждается сутки, не открываем.</p></div>
+        <div class="step"><span class="cap">Шаг 03 · 1 день</span><h3 class="serif">Тишина</h3><p>Каждую вещь проверяем на свет и на звук. Не прошла — разбиваем и возвращаем в массу.</p></div>
+      </div>
+      <div class="bar"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <section class="cta" id="cta">
+    <span class="cap" style="margin-bottom:3vh">Мастер-класс · 3 часа · 4 500 ₽</span>
+    <h2 class="serif">Слепите<br><em>свою</em> чашку</h2>
+    <a class="btn" href="#" id="mag"><span>Записаться →</span></a>
+  </section>
+</main>
+<footer><span>© 2026 Обжиг</span><span>Казань, ул. Баумана, 44</span><span>@obzhig.studio</span></footer>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script type="module">
+import * as THREE from 'three';
+gsap.registerPlugin(ScrollTrigger);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const mobile = innerWidth < 800;
+
+/* ---------- smooth scroll ---------- */
+const lenis = new Lenis({lerp: reduce ? 1 : 0.09});
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+
+/* ---------- 3D object: clay blob with noise shader ---------- */
+const canvas = document.getElementById('gl');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true, powerPreference:'high-performance'}); }
+catch(e){ document.body.classList.add('nowebgl'); }
+
+const S = {x: mobile?0:1.35, y: mobile?0.9:0.05, s: 1, amp: .13, freq: 1.0, rot: 0, tint: 0};
+const mouse = {x:0,y:0,cx:0,cy:0};
+let mesh, mat, camera, scene;
+
+if (renderer) {
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(35, 1, .1, 50);
+  camera.position.z = 5;
+
+  const noise = `
+  vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
+  vec4 mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+  vec4 permute(vec4 x){return mod289(((x*34.)+1.)*x);}
+  vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+  float snoise(vec3 v){
+    const vec2 C=vec2(1./6.,1./3.);const vec4 D=vec4(0.,.5,1.,2.);
+    vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);
+    vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);
+    vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;
+    i=mod289(i);
+    vec4 p=permute(permute(permute(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+    float n_=.142857142857;vec3 ns=n_*D.wyz-D.xzx;
+    vec4 j=p-49.*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.*x_);
+    vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.-abs(x)-abs(y);
+    vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
+    vec4 s0=floor(b0)*2.+1.;vec4 s1=floor(b1)*2.+1.;vec4 sh=-step(h,vec4(0.));
+    vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+    vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
+    vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+    p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+    vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);m*=m;
+    return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+  }`;
+
+  mat = new THREE.ShaderMaterial({
+    uniforms: {uTime:{value:0}, uAmp:{value:S.amp}, uFreq:{value:S.freq}, uTint:{value:0}, uMouse:{value:new THREE.Vector2()}},
+    vertexShader: `
+      uniform float uTime,uAmp,uFreq; uniform vec2 uMouse;
+      varying vec3 vN; varying vec3 vV; varying float vD;
+      ${noise}
+      float disp(vec3 p){
+        float n = snoise(p*uFreq + vec3(0.,uTime*.25,uTime*.15));
+        n += .5*snoise(p*uFreq*2.1 - uTime*.2);
+        return n*uAmp;
+      }
+      void main(){
+        vec3 p = position;
+        float d = disp(p);
+        vec3 np = p + normal*d;
+        // finite-difference normal
+        vec3 t = normalize(cross(normal, vec3(0.,1.,0.)) + 1e-4);
+        vec3 b = normalize(cross(normal, t));
+        float e = .01;
+        vec3 p1 = p + t*e; vec3 p2 = p + b*e;
+        vec3 q1 = normalize(p1)*1.0 + normalize(p1)*disp(p1);
+        vec3 q2 = normalize(p2)*1.0 + normalize(p2)*disp(p2);
+        vec3 nn = normalize(cross(q1-np, q2-np));
+        if(dot(nn,normal)<0.) nn=-nn;
+        vN = normalize(normalMatrix*nn);
+        vec4 mv = modelViewMatrix*vec4(np,1.);
+        vV = -mv.xyz; vD = d;
+        gl_Position = projectionMatrix*mv;
+      }`,
+    fragmentShader: `
+      uniform float uTint,uTime; varying vec3 vN; varying vec3 vV; varying float vD;
+      void main(){
+        vec3 n = normalize(vN); vec3 v = normalize(vV);
+        float fres = pow(1.-max(dot(n,v),0.), 2.4);
+        vec3 L = normalize(vec3(-.5,.8,.7));
+        float dif = max(dot(n,L),0.);
+        float wrap = dif*.65+.35;
+        vec3 clay  = vec3(.77,.41,.29);
+        vec3 cream = vec3(.95,.86,.74);
+        vec3 slate = vec3(.30,.34,.38);
+        vec3 base = mix(clay, slate, uTint);
+        vec3 col = mix(base*.72, cream, smoothstep(-.2,.55,vD*2.+dif*.6));
+        col *= wrap;
+        // pearl sheen
+        vec3 pearl = .5+.5*cos(6.2831*(vec3(0.,.33,.67)+n.y*.35+fres*.6+uTime*.03));
+        col = mix(col, pearl*vec3(1.,.96,.92), fres*.55);
+        float spec = pow(max(dot(reflect(-L,n),v),0.), 40.);
+        col += spec*.35;
+        gl_FragColor = vec4(col,1.);
+      }`
+  });
+  mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1, mobile?40:80), mat);
+  scene.add(mesh);
+
+  const resize = () => {
+    renderer.setSize(innerWidth, innerHeight, false);
+    camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  };
+  addEventListener('resize', resize); resize();
+
+  addEventListener('pointermove', e => { mouse.x = e.clientX/innerWidth*2-1; mouse.y = -(e.clientY/innerHeight*2-1); });
+
+  const clock = new THREE.Clock();
+  const frame = () => {
+    requestAnimationFrame(frame);
+    if (document.hidden) return;
+    const t = reduce ? 0 : clock.getElapsedTime();
+    mouse.cx += (mouse.x-mouse.cx)*.06; mouse.cy += (mouse.y-mouse.cy)*.06;
+    mat.uniforms.uTime.value = t;
+    mat.uniforms.uAmp.value  = S.amp + Math.abs(mouse.cx)*.05;
+    mat.uniforms.uFreq.value = S.freq;
+    mat.uniforms.uTint.value = S.tint;
+    const k = innerWidth/innerHeight;
+    mesh.position.set(S.x*Math.min(k/1.6,1), S.y, 0);
+    mesh.scale.setScalar(S.s * (mobile?.6:.78));
+    mesh.rotation.set(mouse.cy*.35 + S.rot*.4, t*.08 + mouse.cx*.5 + S.rot, 0);
+    renderer.render(scene, camera);
+  };
+  frame();
+}
+
+/* ---------- scroll story: object moves through sections ---------- */
+if (renderer && !reduce) {
+  const m = mobile ? 0 : 1;
+  const tl = gsap.timeline({scrollTrigger:{trigger:'main', start:'top bottom', endTrigger:'footer', end:'top bottom', scrub:1.2}, defaults:{ease:'power2.inOut'}});
+  tl.to(S, {x:-1.3*m, y:mobile?1.2:0, s:.8, amp:.2, freq:1.5, rot:1.2, duration:1}, 0.25)      // manifest
+    .to(S, {x:1.6*m,  y:mobile?1.3:-.1, s:.65, amp:.08, freq:2.2, rot:2.4, duration:1}, 1.35)    // list
+    .to(S, {x:-1.0*m, y:mobile?1.2:0.1, s:1.1, amp:.16, freq:.9, rot:3.6, tint:0, duration:1.2}, 2.5) // process
+    .to(S, {x:0, y:0, s:1.9, amp:.12, freq:.8, rot:5, tint:.0, duration:1}, 4.0);                // cta
+}
+
+/* ---------- intro ---------- */
+const intro = gsap.timeline({delay:.15});
+intro.from('.hero h1 .line>span', {yPercent:115, duration:1.5, ease:'expo.out', stagger:.12})
+     .from('.fade', {y:20, opacity:0, duration:1, ease:'power3.out', stagger:.1}, '-=.9')
+     .from('nav', {yPercent:-100, duration:1, ease:'power3.out'}, '-=1.2');
+if (mesh) intro.from(S, {s:0, duration:1.8, ease:'expo.out'}, 0);
+
+/* ---------- manifest: words light up on scroll ---------- */
+const mf = document.getElementById('mf');
+mf.innerHTML = mf.textContent.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');
+gsap.to('#mf .w', {opacity:1, ease:'none', stagger:.1, scrollTrigger:{trigger:'.manifest', start:'top 70%', end:'bottom 60%', scrub:true}});
+
+/* ---------- marquee reacts to scroll velocity ---------- */
+const trk = document.getElementById('trk');
+let mx = 0;
+gsap.ticker.add(() => {
+  mx -= 0.6 + Math.abs(lenis.velocity)*.35;
+  const half = trk.scrollWidth/2;
+  if (-mx >= half) mx += half;
+  trk.style.transform = `translate3d(${mx}px,0,0)`;
+});
+
+/* ---------- list rows reveal ---------- */
+gsap.from('.row', {yPercent:40, opacity:0, duration:1.1, ease:'power3.out', stagger:.1, scrollTrigger:{trigger:'.list', start:'top 70%'}});
+
+/* ---------- pinned process ---------- */
+const steps = gsap.utils.toArray('.step');
+const num = document.getElementById('num');
+gsap.set(steps[0], {opacity:1});
+let cur = 0;
+ScrollTrigger.create({trigger:'.process', start:'top top', end:'bottom bottom', onUpdate:self=>{
+  gsap.set('#bar', {scaleX:self.progress});
+  const i = Math.min(2, Math.floor(self.progress*3));
+  if (i !== cur){
+    gsap.to(steps[cur], {opacity:0, y:-30, duration:.5, ease:'power2.in'});
+    gsap.fromTo(steps[i], {opacity:0, y:40}, {opacity:1, y:0, duration:.9, ease:'power3.out', delay:.25});
+    num.textContent = '0'+(i+1);
+    if (S) gsap.to(S, {tint: i===2?.55:0, duration:1.2, overwrite:'auto'});
+    cur = i;
+  }
+}});
+
+/* ---------- CTA heading ---------- */
+gsap.from('.cta h2', {y:80, opacity:0, duration:1.4, ease:'expo.out', scrollTrigger:{trigger:'.cta', start:'top 60%'}});
+
+/* ---------- magnetic button + cursor (desktop) ---------- */
+if (matchMedia('(pointer:fine)').matches){
+  const cur = document.querySelector('.cur');
+  const cx = gsap.quickTo(cur,'x',{duration:.35,ease:'power3'}), cy = gsap.quickTo(cur,'y',{duration:.35,ease:'power3'});
+  addEventListener('pointermove', e=>{cx(e.clientX-7); cy(e.clientY-7);});
+  const b = document.getElementById('mag');
+  const bx = gsap.quickTo(b,'x',{duration:.6,ease:'elastic.out(1,.4)'}), by = gsap.quickTo(b,'y',{duration:.6,ease:'elastic.out(1,.4)'});
+  b.addEventListener('pointermove', e=>{const r=b.getBoundingClientRect(); bx((e.clientX-r.left-r.width/2)*.4); by((e.clientY-r.top-r.height/2)*.4);});
+  b.addEventListener('pointerleave', ()=>{bx(0);by(0);});
+  document.querySelectorAll('.row,.btn,nav a').forEach(el=>{
+    el.addEventListener('pointerenter',()=>gsap.to(cur,{scale:3.2,duration:.4}));
+    el.addEventListener('pointerleave',()=>gsap.to(cur,{scale:1,duration:.4}));
+  });
+}
+</script>
+</body>
+</html>
